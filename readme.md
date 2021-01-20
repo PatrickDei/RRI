@@ -3,7 +3,7 @@
 ## Contributors
 	Patrick Deisinger
 	Bruno Laktašić
-	Contributor 3
+	Denis Tišljar
 	Contributor 4
 
 <description>
