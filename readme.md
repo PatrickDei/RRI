@@ -4,7 +4,7 @@
 	Patrick Deisinger
 	Bruno Laktašić
 	Denis Tišljar
-	Contributor 4
+	Luka Ćurić
 
 <description>
 
