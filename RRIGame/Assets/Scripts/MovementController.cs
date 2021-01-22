@@ -7,6 +7,9 @@ public class MovementController : MonoBehaviour
     private Rigidbody rb;
     private Transform car;
     public float speed = 17;
+    public float acceleration = 0.05f;
+    private float currentAcceleration;
+    private char direction;
 
 
     Vector3 rotationRight = new Vector3(0, 150, 0);
@@ -20,17 +23,19 @@ public class MovementController : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody>();
         car = gameObject.GetComponent<Transform>();
+        currentAcceleration = 0f;
+        direction = 'f';
     }
 
     void FixedUpdate()
     {
         if (Input.GetKey("w"))
         {
-            transform.Translate(forward * speed * Time.deltaTime);
+            accelerate();
         }
         if (Input.GetKey("s"))
         {
-            transform.Translate(backward * speed * Time.deltaTime);
+            reverse();
         }
 
         if (Input.GetKey("d"))
@@ -45,5 +50,52 @@ public class MovementController : MonoBehaviour
             rb.MoveRotation(rb.rotation * deltaRotationLeft);
         }
 
+        if (!Input.anyKey)
+        {
+            decellerate();
+        }
+    }
+
+    void accelerate()
+    {
+        if(currentAcceleration < 1)
+            currentAcceleration += acceleration;
+        transform.Translate(forward * speed * Time.deltaTime * currentAcceleration);
+        direction = 'f';
+    }
+
+    void reverse()
+    {
+        if (currentAcceleration < 1)
+            currentAcceleration += acceleration;
+        transform.Translate(backward * speed * Time.deltaTime * currentAcceleration);
+        direction = 'b';
+    }
+
+    void decellerate()
+    {
+        if (currentAcceleration > 0)
+            currentAcceleration -= acceleration;
+        transform.Translate(((direction == 'f') ? forward : backward) * speed * Time.deltaTime * currentAcceleration);
+    }
+
+    IEnumerator OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Debuff")
+        {
+            speed = 5;
+
+            yield return new WaitForSeconds(5);
+
+            speed = 17;
+        }
+        else
+        {
+            speed = 30;
+
+            yield return new WaitForSeconds(5);
+
+            speed = 17;
+        }
     }
 }
