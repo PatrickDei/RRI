@@ -6,11 +6,14 @@ public class MovementController : MonoBehaviour
 {
     private Rigidbody rb;
     private Transform car;
-    public float speed = 17;
-    public float acceleration = 0.05f;
+    public float speed;
+    public float maxSpeed;
+    public float minSpeed;
+    public float acceleration;
     private float currentAcceleration;
     private char direction;
 
+    private float currentSpeed;
 
     Vector3 rotationRight = new Vector3(0, 150, 0);
     Vector3 rotationLeft = new Vector3(0, -150, 0);
@@ -25,6 +28,7 @@ public class MovementController : MonoBehaviour
         car = gameObject.GetComponent<Transform>();
         currentAcceleration = 0f;
         direction = 'f';
+        currentSpeed = speed;
     }
 
     void FixedUpdate()
@@ -54,13 +58,15 @@ public class MovementController : MonoBehaviour
         {
             decellerate();
         }
+
+        CarInstance.SharedInstance.speed = currentSpeed * currentAcceleration;
     }
 
     void accelerate()
     {
         if(currentAcceleration < 1)
             currentAcceleration += acceleration;
-        transform.Translate(forward * speed * Time.deltaTime * currentAcceleration);
+        transform.Translate(forward * currentSpeed * Time.deltaTime * currentAcceleration);
         direction = 'f';
     }
 
@@ -68,7 +74,7 @@ public class MovementController : MonoBehaviour
     {
         if (currentAcceleration < 1)
             currentAcceleration += acceleration;
-        transform.Translate(backward * speed * Time.deltaTime * currentAcceleration);
+        transform.Translate(backward * currentSpeed * Time.deltaTime * currentAcceleration);
         direction = 'b';
     }
 
@@ -76,26 +82,45 @@ public class MovementController : MonoBehaviour
     {
         if (currentAcceleration > 0)
             currentAcceleration -= acceleration;
-        transform.Translate(((direction == 'f') ? forward : backward) * speed * Time.deltaTime * currentAcceleration);
+        transform.Translate(((direction == 'f') ? forward : backward) * currentSpeed * Time.deltaTime * currentAcceleration);
     }
 
     IEnumerator OnTriggerEnter(Collider other)
     {
         if (other.tag == "Debuff")
         {
-            speed = 5;
+            currentSpeed = minSpeed;
 
             yield return new WaitForSeconds(5);
 
-            speed = 17;
+            currentSpeed = speed;
         }
         else
         {
-            speed = 30;
+            currentSpeed = maxSpeed;
 
             yield return new WaitForSeconds(5);
 
-            speed = 17;
+            currentSpeed = speed;
         }
     }
+}
+
+public class CarInstance
+{
+    private static CarInstance instance = null;
+
+    public static CarInstance SharedInstance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new CarInstance();
+            }
+            return instance;
+        }
+    }
+
+    public float speed;
 }
