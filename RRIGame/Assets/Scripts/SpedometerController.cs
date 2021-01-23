@@ -13,6 +13,5 @@ public class SpedometerController : MonoBehaviour
     {
         speed = CarInstance.SharedInstance.speed;
         fill.fillAmount = (speed / 30) * 0.5f;
-        Debug.LogFormat("Speed: {0}", speed);
     }
 }

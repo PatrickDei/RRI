@@ -12,7 +12,6 @@ public class MovementController : MonoBehaviour
     public float acceleration;
     private float currentAcceleration;
     private char direction;
-
     private float currentSpeed;
 
     Vector3 rotationRight = new Vector3(0, 150, 0);
@@ -44,14 +43,18 @@ public class MovementController : MonoBehaviour
 
         if (Input.GetKey("d"))
         {
-            Quaternion deltaRotationRight = Quaternion.Euler(rotationRight * Time.deltaTime);
+            Quaternion deltaRotationRight = Quaternion.Euler(rotationRight * Time.deltaTime * currentAcceleration);
             rb.MoveRotation(rb.rotation * deltaRotationRight);
+            if (!(Input.GetKey("w") || Input.GetKey("s")))
+                decellerate();
         }
 
         if (Input.GetKey("a"))
         {
-            Quaternion deltaRotationLeft = Quaternion.Euler(rotationLeft * Time.deltaTime);
+            Quaternion deltaRotationLeft = Quaternion.Euler(rotationLeft * Time.deltaTime * currentAcceleration);
             rb.MoveRotation(rb.rotation * deltaRotationLeft);
+            if (!(Input.GetKey("w") || Input.GetKey("s")))
+                decellerate();
         }
 
         if (!Input.anyKey)
@@ -64,24 +67,40 @@ public class MovementController : MonoBehaviour
 
     void accelerate()
     {
-        if(currentAcceleration < 1)
-            currentAcceleration += acceleration;
-        transform.Translate(forward * currentSpeed * Time.deltaTime * currentAcceleration);
-        direction = 'f';
+        if (direction == 'f' || currentAcceleration == 0)
+        {
+            if (currentAcceleration < 1)
+                currentAcceleration += acceleration;
+            transform.Translate(forward * currentSpeed * Time.deltaTime * currentAcceleration);
+            direction = 'f';
+        }
+        else
+        {
+            decellerate();
+        }
     }
 
     void reverse()
     {
-        if (currentAcceleration < 1)
-            currentAcceleration += acceleration;
-        transform.Translate(backward * currentSpeed * Time.deltaTime * currentAcceleration);
-        direction = 'b';
+        if (direction == 'b' || currentAcceleration == 0)
+        {
+            if (currentAcceleration < 1)
+                currentAcceleration += acceleration;
+            transform.Translate(backward * currentSpeed * Time.deltaTime * currentAcceleration);
+            direction = 'b';
+        }
+        else
+        {
+            decellerate();
+        }
     }
 
     void decellerate()
     {
         if (currentAcceleration > 0)
             currentAcceleration -= acceleration;
+        else if (currentAcceleration != 0)
+            currentAcceleration = 0f;
         transform.Translate(((direction == 'f') ? forward : backward) * currentSpeed * Time.deltaTime * currentAcceleration);
     }
 
@@ -106,6 +125,9 @@ public class MovementController : MonoBehaviour
     }
 }
 
+
+
+//car singleton
 public class CarInstance
 {
     private static CarInstance instance = null;
