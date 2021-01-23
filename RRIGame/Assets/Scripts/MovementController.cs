@@ -106,6 +106,8 @@ public class MovementController : MonoBehaviour
 
     IEnumerator OnTriggerEnter(Collider other)
     {
+        other.gameObject.SetActive(false);
+        
         if (other.tag == "Debuff")
         {
             currentSpeed = minSpeed;
@@ -122,6 +124,8 @@ public class MovementController : MonoBehaviour
 
             currentSpeed = speed;
         }
+
+        other.gameObject.SetActive(true);
     }
 }
 
