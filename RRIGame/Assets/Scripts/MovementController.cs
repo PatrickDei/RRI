@@ -28,6 +28,7 @@ public class MovementController : MonoBehaviour
         currentAcceleration = 0f;
         direction = 'f';
         currentSpeed = speed;
+        CarInstance.SharedInstance.maxSpeed = maxSpeed;
     }
 
     void FixedUpdate()
@@ -149,4 +150,5 @@ public class CarInstance
     }
 
     public float speed;
+    public float maxSpeed;
 }

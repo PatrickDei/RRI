@@ -14,7 +14,7 @@ public class SpedometerController : MonoBehaviour
     void Update()
     {
         speed = CarInstance.SharedInstance.speed;
-        fill.fillAmount = (speed / 30) * 0.5f;
+        fill.fillAmount = (speed / CarInstance.SharedInstance.maxSpeed) * 0.5f;
         text.text = (Math.Truncate(speed) * 10).ToString();
     }
 }
