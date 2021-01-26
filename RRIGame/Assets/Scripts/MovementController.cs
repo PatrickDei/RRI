@@ -117,7 +117,7 @@ public class MovementController : MonoBehaviour
 
             currentSpeed = speed;
         }
-        else
+        else if (other.tag == "Powerup")
         {
             currentSpeed = maxSpeed;
 
