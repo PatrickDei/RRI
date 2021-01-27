@@ -1586,7 +1586,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Western  Racer
+  m_Text: Saloon Circuit
 --- !u!222 &1732960818
 CanvasRenderer:
   m_ObjectHideFlags: 0
