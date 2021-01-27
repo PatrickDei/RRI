@@ -21,7 +21,6 @@ public class MovementController : MonoBehaviour
     Vector3 forward = new Vector3(0, 0, 1);
     Vector3 backward = new Vector3(0, 0, -1);
 
-    // Initialize
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();

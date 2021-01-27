@@ -6,7 +6,7 @@ public class ButtonManager : MonoBehaviour
 {
     public void NewGameBtn(string NewGameLevel)
     {
-        SceneManager.LoadScene(NewGameLevel);
+        SceneManager.LoadScene("RaceScene");
     }
 
     public void ExitGameBtn()

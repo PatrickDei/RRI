@@ -10,7 +10,6 @@ public class SpedometerController : MonoBehaviour
     private float speed;
     public Text text;
 
-    // Update is called once per frame
     void Update()
     {
         speed = CarInstance.SharedInstance.speed;

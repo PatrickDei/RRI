@@ -17,42 +17,54 @@ public class LapComplete : MonoBehaviour
 	public GameObject MilliDisplay;
 
 	public GameObject LapTimeBox;
+	private bool firstLap = true;
 
 	void OnTriggerEnter()
 	{
-		Debug.Log(MilliDisplay.GetComponent<Text>().text.Substring(0, 1));
-		/*if ((Int32.Parse(SecondDisplay.GetComponent<Text>().text.Trim('.', ':')) >= LapTimeManager.SecondCount
-			&& Int32.Parse(MinuteDisplay.GetComponent<Text>().text.Trim(':', '.')) >= LapTimeManager.MinuteCount)
-			|| Int32.Parse(MilliDisplay.GetComponent<Text>().text.Trim(',', ':', '.')) == 0)
-		{*/
-			if (LapTimeManager.SecondCount <= 9)
-			{
-				SecondDisplay.GetComponent<Text>().text = "0" + LapTimeManager.SecondCount + ".";
-			}
-			else
-			{
-				SecondDisplay.GetComponent<Text>().text = "" + LapTimeManager.SecondCount + ".";
-			}
-
-			if (LapTimeManager.MinuteCount <= 9)
-			{
-				MinuteDisplay.GetComponent<Text>().text = "0" + LapTimeManager.MinuteCount + ":";
-			}
-			else
-			{
-				MinuteDisplay.GetComponent<Text>().text = "" + LapTimeManager.MinuteCount + ":";
-			}
-
-			MilliDisplay.GetComponent<Text>().text = "" + LapTimeManager.MilliCount;
-			Debug.Log(MilliDisplay.GetComponent<Text>().text);
-		//}
-
+		// if minute is better
+		if (Int32.Parse(MinuteDisplay.GetComponent<Text>().text.Trim(':')) > LapTimeManager.MinuteCount || firstLap)
+			PushToScoreboard();
+		else if (Int32.Parse(MinuteDisplay.GetComponent<Text>().text.Trim(':')) == LapTimeManager.MinuteCount)
+        {
+			// if second is better
+			if (Int32.Parse(SecondDisplay.GetComponent<Text>().text.Trim('.')) > LapTimeManager.SecondCount)
+				PushToScoreboard();
+			else if (Int32.Parse(SecondDisplay.GetComponent<Text>().text.Trim('.')) == LapTimeManager.SecondCount)
+				if (Int32.Parse(MilliDisplay.GetComponent<Text>().text.Substring(0, 1)) > LapTimeManager.MilliCount)
+					PushToScoreboard();
+        }
+		
 		LapTimeManager.MinuteCount = 0;
 		LapTimeManager.SecondCount = 0;
 		LapTimeManager.MilliCount = 0;
 
 		HalfLapTrig.SetActive(true);
 		LapCompleteTrig.SetActive(false);
+		firstLap = false;
+	}
+
+	void PushToScoreboard()
+    {
+		if (LapTimeManager.SecondCount <= 9)
+		{
+			SecondDisplay.GetComponent<Text>().text = "0" + LapTimeManager.SecondCount + ".";
+		}
+		else
+		{
+			SecondDisplay.GetComponent<Text>().text = "" + LapTimeManager.SecondCount + ".";
+		}
+
+		if (LapTimeManager.MinuteCount <= 9)
+		{
+			MinuteDisplay.GetComponent<Text>().text = "0" + LapTimeManager.MinuteCount + ":";
+		}
+		else
+		{
+			MinuteDisplay.GetComponent<Text>().text = "" + LapTimeManager.MinuteCount + ":";
+		}
+
+		MilliDisplay.GetComponent<Text>().text = "" + LapTimeManager.MilliCount;
+
 	}
 
 }
