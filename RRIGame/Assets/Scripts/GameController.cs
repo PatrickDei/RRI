@@ -15,6 +15,9 @@ public class GameController : MonoBehaviour
 
     void restartLevel()
     {
+        LapTimeManager.MilliCount = 0;
+        LapTimeManager.SecondCount = 0;
+        LapTimeManager.MinuteCount = 0;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Debuff
   - Powerup
+  - Track
   layers:
   - Default
   - TransparentFX

@@ -14,8 +14,8 @@ public class MovementController : MonoBehaviour
     private char direction;
     private float currentSpeed;
 
-    Vector3 rotationRight = new Vector3(0, 150, 0);
-    Vector3 rotationLeft = new Vector3(0, -150, 0);
+    Vector3 rotationRight = new Vector3(0, 80, 0);
+    Vector3 rotationLeft = new Vector3(0, -80, 0);
 
     Vector3 forward = new Vector3(0, 0, 1);
     Vector3 backward = new Vector3(0, 0, -1);
@@ -107,26 +107,29 @@ public class MovementController : MonoBehaviour
 
     IEnumerator OnTriggerEnter(Collider other)
     {
-        other.gameObject.SetActive(false);
-        
-        if (other.tag == "Debuff")
+        if (other.gameObject.name != "HalfPointTrigger" && other.gameObject.name != "LapCompleteTrigger")
         {
-            currentSpeed = minSpeed;
+            other.gameObject.SetActive(false);
 
-            yield return new WaitForSeconds(5);
+            if (other.tag == "Debuff")
+            {
+                currentSpeed = minSpeed;
 
-            currentSpeed = speed;
+                yield return new WaitForSeconds(5);
+
+                currentSpeed = speed;
+            }
+            else if (other.tag == "Powerup")
+            {
+                currentSpeed = maxSpeed;
+
+                yield return new WaitForSeconds(5);
+
+                currentSpeed = speed;
+            }
+
+            other.gameObject.SetActive(true);
         }
-        else if (other.tag == "Powerup")
-        {
-            currentSpeed = maxSpeed;
-
-            yield return new WaitForSeconds(5);
-
-            currentSpeed = speed;
-        }
-
-        other.gameObject.SetActive(true);
     }
 }
 
