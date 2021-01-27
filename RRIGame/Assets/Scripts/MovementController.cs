@@ -135,6 +135,12 @@ public class MovementController : MonoBehaviour
 
                 currentSpeed = speed;
             }
+            else if (other.tag == "Time")
+            {
+                LapTimeManager.SecondCount -= 5;
+
+                yield return new WaitForSeconds(5);
+            }
 
             other.gameObject.SetActive(true);
         }
