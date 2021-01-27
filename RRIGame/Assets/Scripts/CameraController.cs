@@ -4,12 +4,12 @@ using System.Collections;
 public class CameraController : MonoBehaviour
 {
     public Transform target;
-    public float distance = 3.0f;
-    public float height = 3.0f;
-    public float damping = 5.0f;
+    public float distance;
+    public float height;
+    public float damping;
     public bool smoothRotation = true;
     public bool followBehind = true;
-    public float rotationDamping = 10.0f;
+    public float rotationDamping;
 
     void Update()
     {
