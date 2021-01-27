@@ -13,6 +13,7 @@ public class MovementController : MonoBehaviour
     private float currentAcceleration;
     private char direction;
     private float currentSpeed;
+    private float distanceToGround;
 
     Vector3 rotationRight = new Vector3(0, 80, 0);
     Vector3 rotationLeft = new Vector3(0, -80, 0);
@@ -29,41 +30,49 @@ public class MovementController : MonoBehaviour
         direction = 'f';
         currentSpeed = speed;
         CarInstance.SharedInstance.maxSpeed = maxSpeed;
+        distanceToGround = GetComponent<Collider>().bounds.extents.y;
     }
 
     void FixedUpdate()
     {
-        if (Input.GetKey("w"))
+        if (IsGrounded())
         {
-            accelerate();
-        }
-        if (Input.GetKey("s"))
-        {
-            reverse();
-        }
+            if (Input.GetKey("w"))
+            {
+                accelerate();
+            }
+            if (Input.GetKey("s"))
+            {
+                reverse();
+            }
 
-        if (Input.GetKey("d"))
-        {
-            Quaternion deltaRotationRight = Quaternion.Euler(rotationRight * Time.deltaTime * currentAcceleration);
-            rb.MoveRotation(rb.rotation * deltaRotationRight);
-            if (!(Input.GetKey("w") || Input.GetKey("s")))
-                decellerate();
-        }
+            if (Input.GetKey("d"))
+            {
+                Quaternion deltaRotationRight = Quaternion.Euler(rotationRight * Time.deltaTime * currentAcceleration);
+                rb.MoveRotation(rb.rotation * deltaRotationRight);
+                if (!(Input.GetKey("w") || Input.GetKey("s")))
+                    decellerate();
+            }
 
-        if (Input.GetKey("a"))
-        {
-            Quaternion deltaRotationLeft = Quaternion.Euler(rotationLeft * Time.deltaTime * currentAcceleration);
-            rb.MoveRotation(rb.rotation * deltaRotationLeft);
-            if (!(Input.GetKey("w") || Input.GetKey("s")))
-                decellerate();
+            if (Input.GetKey("a"))
+            {
+                Quaternion deltaRotationLeft = Quaternion.Euler(rotationLeft * Time.deltaTime * currentAcceleration);
+                rb.MoveRotation(rb.rotation * deltaRotationLeft);
+                if (!(Input.GetKey("w") || Input.GetKey("s")))
+                    decellerate();
+            }
         }
-
-        if (!Input.anyKey)
+        if (!Input.anyKey || !IsGrounded())
         {
             decellerate();
         }
 
         CarInstance.SharedInstance.speed = currentSpeed * currentAcceleration;
+    }
+
+    bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.3f);
     }
 
     void accelerate()
