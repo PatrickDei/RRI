@@ -45,5 +45,6 @@ public class GameController : MonoBehaviour
     void ToMainMenu()
     {
         SceneManager.LoadScene("LevelSelect");
+        Time.timeScale = 1;
     }
 }
